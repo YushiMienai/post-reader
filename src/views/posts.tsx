@@ -45,16 +45,19 @@ function Posts() {
     ...emptyParams,
     ...searchParams,
   })
-  const [searchPage, setSearchPage] = useState(params.page)
+  const [searchPage, setSearchPage] = useState(params.page.toString())
 
   const loadPosts = (page: number) => {
     getPosts(page)
     setParams({...params, page, searchName: '', searchString: ''})
-    setSearchPage(page)
+    setSearchPage(page.toString())
   }
 
   // eslint-disable-next-line
-  const findResults = useCallback(debounce(async page => setParams({...params, page}), 600), [])
+  const findResults = useCallback(debounce(async page => {
+    page = Math.max(1, Math.min(99, parseInt(page)))
+    !isNaN(page) && setParams({...params, page})
+  }, 600), [])
 
   useEffect(() => {
     if (!!users.length && !params.user) searchWith({user: users[0].id})
@@ -125,7 +128,7 @@ function Posts() {
             <Input
               className='pageInput'
               value={searchPage}
-              onChange={({target}) => setSearchPage(Math.max(1, Math.min(99, parseInt(target.value))))}
+              onChange={({target}) => setSearchPage(target.value)}
             />
             <Pager
               page={params.page}
