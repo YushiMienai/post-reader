@@ -1,6 +1,7 @@
 import Cookies from 'universal-cookie/es6'
 import queryString from 'querystring'
-import {startLoader, stoptLoader} from './redux/actions/loader'
+// @ts-ignore
+import {startLoader, stoptLoader} from '@actions/loader'
 
 class Api {
   headers: HeadersInit = { 'Content-Type': 'application/json' }

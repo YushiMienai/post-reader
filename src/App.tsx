@@ -1,6 +1,7 @@
 import React, {useEffect} from 'react'
 import {RootStateOrAny, useSelector} from 'react-redux'
-import {getToken} from './redux/actions/register'
+// @ts-ignore
+import {getToken} from '@actions/register'
 import {BrowserRouter as Router, Route, Routes} from 'react-router-dom'
 import * as Views from './views'
 import './App.css'

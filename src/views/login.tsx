@@ -1,6 +1,7 @@
 import {useState} from 'react'
 import {Button, Card, Form} from 'semantic-ui-react'
-import {register} from 'redux/actions/register'
+// @ts-ignore
+import {register} from '@actions/register'
 
 function Login() {
   const [name, setName] = useState('')
