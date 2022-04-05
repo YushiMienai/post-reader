@@ -45,8 +45,8 @@ Nice to haves:
 - Deep-linkable post list. This means that it is possible to enter a URL that directly selects the sender whose posts are shown.
 
 ## Rough Design
-![Login Screen](./readme-images/login.png)
-![Posts Screen](./readme-images/posts.png)
+![Login Screen](https://github.com/YushiMienai/post-reader/blob/master/readmi-images/login.png)
+![Posts Screen](https://github.com/YushiMienai/post-reader/blob/master/readmi-images/posts.png)
 
 ## API
 
