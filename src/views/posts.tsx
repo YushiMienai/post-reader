@@ -8,13 +8,13 @@ import {LoadingScreen, Post, UserMenu, PostControls} from 'components'
 import {orderBy} from 'lodash'
 import {highlightString} from 'helpers/strings'
 import queryString from 'query-string'
-import {PostType} from 'types'
+import {ParamsType, PostType} from 'types'
 
 function Posts() {
   const {search} = useLocation()
   const navigate = useNavigate()
 
-  const emptyParams: PostType = {
+  const emptyParams: ParamsType = {
     page: 1,
     user: '',
     searchName: '',
@@ -44,7 +44,7 @@ function Posts() {
     // eslint-disable-next-line
   }, [params.page, params.user])
 
-  const displayedPosts = orderBy(posts.filter((post: any) =>
+  const displayedPosts = orderBy(posts.filter((post: PostType) =>
     post.from_id === params.user && post.message.toLowerCase().includes(params.searchString.toLowerCase()))
     , ['created_time'], [params.sortOrder])
 
@@ -81,7 +81,7 @@ function Posts() {
               params={params}
               searchWith={searchWith}
             />
-            {!!displayedPosts.length && displayedPosts.map((post: any) =>
+            {!!displayedPosts.length && displayedPosts.map((post: PostType) =>
               <Post
                 key={post.id}
                 created_time={post.created_time}

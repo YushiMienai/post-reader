@@ -1,10 +1,10 @@
-import {Pager, SearchInput} from 'components/index'
+import {Pager, SearchInput} from 'components'
 import {debounce} from 'lodash'
 import {useCallback, useEffect, useState} from 'react'
 import {Button, Input} from 'semantic-ui-react'
-import {PostType} from 'types'
+import {ParamsType} from 'types'
 
-function PostControls({params, searchWith}: {params: PostType, searchWith: Function}) {
+function PostControls({params, searchWith}: {params: ParamsType, searchWith: Function}) {
   const [searchPage, setSearchPage] = useState(params.page.toString())
 
   // eslint-disable-next-line

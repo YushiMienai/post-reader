@@ -1,13 +1,13 @@
-import {SearchInput} from 'components/index'
+import {SearchInput} from 'components'
 import {countBy, orderBy, uniqBy} from 'lodash'
 import {useEffect} from 'react'
 import {Label, Menu} from 'semantic-ui-react'
-import {PostType} from 'types'
+import {ParamsType, PostType} from 'types'
 
-function UserMenu({posts, params, searchWith}: {posts: object[], params: PostType, searchWith: Function}) {
+function UserMenu({posts, params, searchWith}: {posts: PostType[], params: ParamsType, searchWith: Function}) {
 
   // @ts-ignore
-  const users: UserType[] = orderBy(uniqBy(posts.map((post: any) => ({id: post.from_id, name: post.from_name})), 'id'), ['name'])
+  const users: UserType[] = orderBy(uniqBy(posts.map((post: PostType) => ({id: post.from_id, name: post.from_name})), 'id'), ['name'])
   const count = countBy(posts, 'from_id')
 
   useEffect(() => {
