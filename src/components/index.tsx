@@ -1,3 +1,6 @@
 export {default as Post} from './post'
 export {default as LoadingScreen} from './loadingScreen'
 export {default as Pager} from './pager'
+export {default as UserMenu} from './userMenu'
+export {default as PostControls} from './postControls'
+export {default as SearchInput} from './searchInput'

@@ -1,32 +1,20 @@
-import {useCallback, useEffect, useState} from 'react'
+import {useEffect, useState} from 'react'
 import {RootStateOrAny, useSelector} from 'react-redux'
 import {useLocation, useNavigate} from 'react-router-dom'
-import {Button, Grid, Input, Label, Menu} from 'semantic-ui-react'
+import {Grid} from 'semantic-ui-react'
 // @ts-ignore
 import {getPosts} from '@actions/posts'
-import {LoadingScreen, Pager, Post} from 'components'
-import {uniqBy, countBy, orderBy, debounce} from 'lodash'
+import {LoadingScreen, Post, UserMenu, PostControls} from 'components'
+import {orderBy} from 'lodash'
 import {highlightString} from 'helpers/strings'
 import queryString from 'query-string'
+import {PostType} from 'types'
 
 function Posts() {
   const {search} = useLocation()
   const navigate = useNavigate()
 
-  type ParamType = {
-    page: number,
-    user: string,
-    searchName: string,
-    searchString: string,
-    sortOrder: 'asc' | 'desc'
-  }
-
-  type UserType = {
-    id: string,
-    name: string
-  }
-
-  const emptyParams: ParamType = {
+  const emptyParams: PostType = {
     page: 1,
     user: '',
     searchName: '',
@@ -37,37 +25,16 @@ function Posts() {
 
   const {posts} = useSelector((state: RootStateOrAny) => state.posts)
   const {loader} = useSelector((state: RootStateOrAny) => state.loader)
-  // @ts-ignore
-  const users: UserType[] = orderBy(uniqBy(posts.map((post: any) => ({id: post.from_id, name: post.from_name})), 'id'), ['name'])
-  const count = countBy(posts, 'from_id')
 
   const [params, setParams] = useState({
     ...emptyParams,
     ...searchParams,
   })
-  const [searchPage, setSearchPage] = useState(params.page.toString())
 
   const loadPosts = (page: number) => {
     getPosts(page)
     setParams({...params, page, searchName: '', searchString: ''})
-    setSearchPage(page.toString())
   }
-
-  // eslint-disable-next-line
-  const findResults = useCallback(debounce(async page => {
-    page = Math.max(1, Math.min(99, parseInt(page)))
-    !isNaN(page) && setParams({...params, page})
-  }, 600), [])
-
-  useEffect(() => {
-    if (!!users.length && !params.user) searchWith({user: users[0].id})
-    // eslint-disable-next-line
-  }, [params.user, users])
-
-  useEffect(() => {
-    findResults(searchPage)
-    // eslint-disable-next-line
-  }, [searchPage])
 
   // eslint-disable-next-line
   useEffect(() => loadPosts(params.page), [params.page])
@@ -98,26 +65,11 @@ function Posts() {
             computer={4}
             tablet={5}
           >
-            <Menu vertical>
-              <Menu.Item>
-                <Input
-                  placeholder='Search...'
-                  value={params.searchName}
-                  onChange={({target}) => searchWith({searchName: target.value})}
-                />
-              </Menu.Item>
-              {!!users.length && users.filter(({name}: any) => !params.searchName || name.toLowerCase().includes(params.searchName.toLowerCase()))
-                .map(({id, name}: any) =>
-                  <Menu.Item
-                    key={id}
-                    active={id === params.user}
-                    onClick={() => searchWith({user: id})}
-                  >
-                    {name}
-                    <Label>{count[id]}</Label>
-                  </Menu.Item>
-              )}
-            </Menu>
+            <UserMenu
+              posts={posts}
+              params={params}
+              searchWith={searchWith}
+            />
           </Grid.Column>
           <Grid.Column
             className='controlMenu'
@@ -125,32 +77,10 @@ function Posts() {
             computer={12}
             tablet={11}
           >
-            <Input
-              className='pageInput'
-              value={searchPage}
-              onChange={({target}) => setSearchPage(target.value)}
-            />
-            <Pager
-              page={params.page}
+            <PostControls
+              params={params}
               searchWith={searchWith}
             />
-            <Input
-              placeholder='Search...'
-              value={params.searchString}
-              onChange={({target}) => searchWith({searchString: target.value})}
-            />
-            <Button.Group>
-              <Button
-                icon='chevron up'
-                disabled={params.sortOrder === 'asc'}
-                onClick={() => searchWith({sortOrder: 'asc'})}
-              />
-              <Button
-                icon='chevron down'
-                disabled={params.sortOrder === 'desc'}
-                onClick={() => searchWith({sortOrder: 'desc'})}
-              />
-            </Button.Group>
             {!!displayedPosts.length && displayedPosts.map((post: any) =>
               <Post
                 key={post.id}
