@@ -2,14 +2,14 @@ import {Pager, SearchInput} from 'components'
 import {debounce} from 'lodash'
 import {useCallback, useEffect, useState} from 'react'
 import {Button, Input} from 'semantic-ui-react'
-import {ParamsType} from 'types'
+import {ParamsType, MAX_PAGE_NUMBER} from 'types'
 
 function PostControls({params, searchWith}: {params: ParamsType, searchWith: Function}) {
   const [searchPage, setSearchPage] = useState(params.page.toString())
 
   // eslint-disable-next-line
   const findResults = useCallback(debounce(async page => {
-    page = Math.max(1, Math.min(99, parseInt(page)))
+    page = Math.max(1, Math.min(MAX_PAGE_NUMBER, parseInt(page)))
     !isNaN(page) && searchWith({page})
   }, 600), [])
 

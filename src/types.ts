@@ -19,3 +19,5 @@ export type PostType = {
   message: string,
   type: string
 }
+
+export const MAX_PAGE_NUMBER: number = 10
