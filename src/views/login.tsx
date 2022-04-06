@@ -11,27 +11,30 @@ function Login() {
     await register({email, name})
   }
 
+  const formParams = [
+    {value: email, label: 'Email', onChange: setEmail},
+    {value: name, label: 'Name', onChange: setName}
+  ]
+
   return (
     <Card className='center'>
       <Card.Content header='LOGIN'/>
       <Card.Content>
         <Form>
-          <Form.Input
-            label='Email'
-            value={email}
-            onChange={({target}) => setEmail(target.value)}
-          />
-          <Form.Input
-            label='Name'
-            value={name}
-            onChange={({target}) => setName(target.value)}
-          />
+          {formParams.map(({value, label, onChange}, idx) =>
+            <Form.Input
+              key={idx}
+              label={label}
+              value={value}
+              onChange={({target}) => onChange(target.value)}
+            />
+          )}
           <Form.Field>
-            <div><Button
+            <Button
               disabled={!name || !email}
               content='GO'
               onClick={onSignIn}
-            /></div>
+            />
           </Form.Field>
         </Form>
       </Card.Content>
